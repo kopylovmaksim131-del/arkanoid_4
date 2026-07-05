@@ -13,7 +13,6 @@
 
 namespace ArkanoidGame
 {
-	//class Block;
 	enum class BonusType
 	{
 		FastPlatform,
@@ -41,7 +40,6 @@ namespace ArkanoidGame
 		std::unique_ptr<BonusEffect> effect;
 
 	private:
-		//void OnHit();
 		float speed = SETTINGS.INITIAL_SPEED / 2.f;
 	};
 }

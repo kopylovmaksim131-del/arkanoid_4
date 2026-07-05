@@ -7,7 +7,6 @@
 #include "Sprite.h"
 #include "GameObject.h"
 #include "Collidable.h"
-#include "Observer.h"
 
 namespace ArkanoidGame
 {
@@ -26,15 +25,11 @@ namespace ArkanoidGame
 
 		int GetHitCount();
 		void SetHitCount(const int count);
-		void addObserver(IObserver* obs);
-		void removeObserver(IObserver* obs);
-		void notifyObservers();
 
 		static sf::Texture* texture;
 		static void LoadTexture();
 
 	private:
-		std::vector<IObserver*> observers;
 		void OnHit();
 		std::vector<sf::Color> blockColors{ sf::Color::White, sf::Color::Red, sf::Color::Yellow, sf::Color::Blue };
 	};

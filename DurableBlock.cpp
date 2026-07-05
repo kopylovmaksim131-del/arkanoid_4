@@ -12,8 +12,5 @@ namespace ArkanoidGame
 	{
 		hitCount -= 1;
 		sprite.setColor(blockColors[hitCount]);
-		if (hitCount == 0) {
-			notifyObservers();
-		}
 	}
 }

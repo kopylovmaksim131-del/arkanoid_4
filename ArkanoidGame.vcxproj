@@ -172,7 +172,6 @@
     <ClCompile Include="GameStateGameWin.cpp" />
     <ClCompile Include="GlassBlock.cpp" />
     <ClCompile Include="LevelLoader.cpp" />
-    <ClCompile Include="Observer.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameMain.cpp" />
@@ -203,7 +202,6 @@
     <ClInclude Include="GameStateGameWin.h" />
     <ClInclude Include="GlassBlock.h" />
     <ClInclude Include="LevelLoader.h" />
-    <ClInclude Include="Observer.h" />
     <ClInclude Include="ScoreStrategy.h" />
     <ClInclude Include="SimpleScoreStrategy.h" />
     <ClInclude Include="SizeEffect.h" />

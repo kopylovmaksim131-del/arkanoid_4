@@ -19,22 +19,30 @@ namespace ArkanoidGame
 		BonusType type;
 	};
 
+	struct GameSaveData
+	{
+		int playerScore = 0;
+	};
+
 	class GameMemento
 	{
 		friend class GameStatePlayingData;
 
 		BallSaveData ballData;
 		PlatformSaveData platformData;
+		GameSaveData gameSaveData;
 		std::vector<BlockSaveData> gameObjects;
 		std::vector<BonusSaveData> bonusData;
 
 	public:
 		GameMemento(const BallSaveData ball,
 			const PlatformSaveData platform,
+			const GameSaveData gameSave,
 			const std::vector<BlockSaveData> objects,
 			const std::vector<BonusSaveData> bonuses)
 			: ballData(ball),
 			platformData(platform),
+			gameSaveData(gameSave),
 			gameObjects(objects),
 			bonusData(bonuses) {};
 	};

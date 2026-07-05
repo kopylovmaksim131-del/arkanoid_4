@@ -20,6 +20,8 @@ namespace ArkanoidGame
 				return 5;
 			case ObjectType::ThreeHit:
 				return 20;
+			default:
+				return 0;
 			}
 		}
 	};

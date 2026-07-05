@@ -7,7 +7,6 @@ namespace ArkanoidGame
 	void Bonus::Init()
 	{
 		InitSprite(sprite, SETTINGS.BONUS_SIZE, SETTINGS.BONUS_SIZE, *texture);
-		//sprite.setPosition(pos.x, pos.y);
 		type = ObjectType::Bonus;
 	}
 
@@ -46,6 +45,7 @@ namespace ArkanoidGame
 	void Bonus::ApplyEffect(Platform& p, Ball& b)
 	{
 	}
+
 	BonusType Bonus::GetBonusType()
 	{
 		return bonusType;

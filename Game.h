@@ -63,8 +63,6 @@ namespace ArkanoidGame
 		void UpdateGameState(GameState& state, float timeDelta);
 		void DrawGameState(GameState& state);
 		bool IsEnableOptions(GameOptions option);
-		//void QuickSave(GameState& state);
-		//void QuickLoad(GameState& state);
 		Game();
 
 	public:

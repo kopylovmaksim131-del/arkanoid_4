@@ -36,7 +36,7 @@ namespace ArkanoidGame
 
 		CreatBlocks();
 
-		background.setSize(sf::Vector2f(SETTINGS.SCREEN_WIDTH, SETTINGS.SCREEN_HEGHT));
+		background.setSize(sf::Vector2f(static_cast<float>(SETTINGS.SCREEN_WIDTH), static_cast<float>(SETTINGS.SCREEN_HEGHT)));
 		background.setPosition(0.f, 0.f);
 		background.setFillColor(sf::Color(0, 200, 0));
 
@@ -57,15 +57,19 @@ namespace ArkanoidGame
 			}
 			else if (event.key.code == sf::Keyboard::F5)
 			{
-				Application::Instance().GetGame().saves.push(Save());
+				if (isGameStart) {
+					Application::Instance().GetGame().saves.push(Save());
+				}
 			}
 			else if (event.key.code == sf::Keyboard::F9)
 			{
-				auto& game = Application::Instance().GetGame();
-				if (!game.saves.empty())
-				{
-					Load(game.saves.top()); 
-					game.saves.pop();
+				if (isGameStart) {
+					auto& game = Application::Instance().GetGame();
+					if (!game.saves.empty())
+					{
+						Load(game.saves.top());
+						game.saves.pop();
+					}
 				}
 			}
 		}
@@ -131,66 +135,68 @@ namespace ArkanoidGame
 			{
 				isGameFinished = true;
 			}
-
-			platform->CheckCollision(ball);
-
-			for (auto& obj : gameObjects)
+			else
 			{
-				auto block = std::dynamic_pointer_cast<Block>(obj);
-				if (block && block->CheckCollision(ball))
-				{
-					if (rand() % 100 < 10 && block->GetHitCount() == 0)
-					{  
-						CreateBonus(obj->GetPosition());
-					}
+				platform->CheckCollision(ball);
 
-					if (block->GetHitCount() == 0)
+				for (auto& obj : gameObjects)
+				{
+					auto block = std::dynamic_pointer_cast<Block>(obj);
+					if (block && block->CheckCollision(ball))
 					{
-						totalScore += scoreStrategy->Calculate(block->GetType());
-					}
+						if (rand() % 100 < 10 && block->GetHitCount() == 0)
+						{
+							CreateBonus(obj->GetPosition());
+						}
 
-					gameObjects.erase(
-						std::remove_if(gameObjects.begin(), gameObjects.end(),
-							[](const auto& obj) {
-								auto block = std::dynamic_pointer_cast<Block>(obj);
-								return block && block->GetHitCount() == 0;
-							}),
-						gameObjects.end()
-					);
-					break;
+						if (block->GetHitCount() == 0)
+						{
+							totalScore += scoreStrategy->Calculate(block->GetType());
+						}
+
+						gameObjects.erase(
+							std::remove_if(gameObjects.begin(), gameObjects.end(),
+								[](const auto& obj) {
+									auto block = std::dynamic_pointer_cast<Block>(obj);
+									return block && block->GetHitCount() == 0;
+								}),
+							gameObjects.end()
+						);
+						break;
+					}
 				}
-			}
-			
-			for (int i = 0; i < bonuses.size(); i++)
-			{
-				bonuses[i]->Update(timeDelta);
-				if (bonuses[i]->CheckCollision(platform))
+
+				for (int i = 0; i < bonuses.size(); i++)
 				{
-					bonuses[i]->ApplyEffect(*platform, *ball);
-					bonuses.erase(bonuses.begin() + i);
-					i--;
-				}
-				else if (bonuses[i]->GetPosition().y > SETTINGS.SCREEN_HEGHT)
-				{
-					bonuses.erase(bonuses.begin() + i);
-					i--;
+					bonuses[i]->Update(timeDelta);
+					if (bonuses[i]->CheckCollision(platform))
+					{
+						bonuses[i]->ApplyEffect(*platform, *ball);
+						bonuses.erase(bonuses.begin() + i);
+						i--;
+					}
+					else if (bonuses[i]->GetPosition().y > SETTINGS.SCREEN_HEGHT)
+					{
+						bonuses.erase(bonuses.begin() + i);
+						i--;
+					}
 				}
 			}
 		}
 		
+		auto& game = Application::Instance().GetGame();
+		game.recordsTable[SETTINGS.PLAYER_NAME] = std::max(game.recordsTable[SETTINGS.PLAYER_NAME], totalScore);
 		if (isGameFinished) 
 		{
 			gameOverSound.play();
 			isGameStart = false;
-			auto& game = Application::Instance().GetGame();
-			game.recordsTable[SETTINGS.PLAYER_NAME] = std::max(game.recordsTable[SETTINGS.PLAYER_NAME], totalScore);
 			game.PushGameState(GameStateType::GameOver, false);
 		}
 		else if (gameObjects.size() == 2)
 		{
 			gameWinSound.play();
 			isGameStart = false;
-			Application::Instance().GetGame().PushGameState(GameStateType::GameWin, false);
+			game.PushGameState(GameStateType::GameWin, false);
 		}
 	}
 
@@ -267,6 +273,8 @@ namespace ArkanoidGame
 			platform->GetSaveData()
 		};
 
+		GameSaveData gameSave{ totalScore };
+
 		std::vector<BlockSaveData> blocksData;
 
 		for (int i = 2; i < gameObjects.size(); i++)
@@ -283,7 +291,7 @@ namespace ArkanoidGame
 			bonusesData.push_back({ bonus->GetPosition(), bonus->GetBonusType() });
 		}
 
-		return GameMemento(ballData, platformData, blocksData, bonusesData);
+		return GameMemento(ballData, platformData, gameSave, blocksData, bonusesData);
 	}
 
 	void GameStatePlayingData::Load(GameMemento& objects)
@@ -293,6 +301,8 @@ namespace ArkanoidGame
 
 		auto platform = std::dynamic_pointer_cast<Platform>(gameObjects[0]);
 		platform->LoadData(objects.platformData);
+
+		totalScore = objects.gameSaveData.playerScore;
 
 		gameObjects.clear();
 		gameObjects.push_back(platform);

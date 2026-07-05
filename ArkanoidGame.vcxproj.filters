@@ -70,9 +70,6 @@
     <ClCompile Include="BlockFactory.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Observer.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Bonus.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
@@ -144,9 +141,6 @@
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="BlockFactory.h">
-      <Filter>Sources</Filter>
-    </ClInclude>
-    <ClInclude Include="Observer.h">
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="GameMemento.h">

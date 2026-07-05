@@ -11,18 +11,6 @@ namespace ArkanoidGame
 		assert(texture->loadFromFile(SETTINGS.TEXTURES_PATH + "Block.png"));
 	}
 
-	void Block::removeObserver(IObserver* obs)
-	{
-		observers.erase(std::remove(observers.begin(), observers.end(), obs), observers.end());
-	}
-
-	void Block::notifyObservers()
-	{
-		for (IObserver* obs : observers) {
-			obs->onNotify();
-		}
-	}
-
 	Block::Block(const sf::Vector2f& blockPosition)
 	{
 		InitSprite(sprite, SETTINGS.BLOCK_WIDTH, SETTINGS.BLOCK_HIGHT, *texture);
@@ -58,15 +46,9 @@ namespace ArkanoidGame
 		hitCount = count;
 	}
 
-	void Block::addObserver(IObserver* obs)
-	{
-		observers.push_back(obs);
-	}
-
 	void Block::OnHit()
 	{
 		hitCount -= 1;
-		notifyObservers();
 	}
 
 	bool Block::GetCollision(std::shared_ptr<Collidable> collidable) const

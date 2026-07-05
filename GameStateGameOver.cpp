@@ -7,8 +7,6 @@
 
 namespace ArkanoidGame
 {
-	
-
 	void GameStateGameOverData:: Init()
 	{
 		assert(font.loadFromFile(SETTINGS.RESOURCES_PATH + "Fonts/Roboto-Regular.ttf"));
@@ -34,7 +32,7 @@ namespace ArkanoidGame
 			sortedRecordsTable.insert(std::make_pair(item.second, item.first));
 		}
 
-		bool isSnakeInTable = false;
+		bool isGameOver = false;
 		auto it = sortedRecordsTable.rbegin();
 		for (int i = 0; i < SETTINGS.MAX_RECORDS_TABLE_SIZE && it != sortedRecordsTable.rend(); ++i, ++it)
 		{
@@ -50,7 +48,7 @@ namespace ArkanoidGame
 			if (it->second == SETTINGS.PLAYER_NAME)
 			{
 				text.setFillColor(sf::Color::Green);
-				isSnakeInTable = true;
+				isGameOver = true;
 			}
 			else
 			{
@@ -58,7 +56,7 @@ namespace ArkanoidGame
 			}
 		}
 
-		if (!isSnakeInTable)
+		if (!isGameOver)
 		{
 			sf::Text& text = recordsTableTexts.back();
 			std::stringstream sstream;
@@ -67,7 +65,7 @@ namespace ArkanoidGame
 			text.setFillColor(sf::Color::Green);
 		}
 
-		isSnakeInTable = false;
+		isGameOver = false;
 
 		hintText.setFont(font);
 		hintText.setCharacterSize(24);

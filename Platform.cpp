@@ -143,9 +143,10 @@ namespace ArkanoidGame
 	{
 		sf::Vector2f platformPos = sprite.getPosition();
 		auto ball = std::dynamic_pointer_cast<Ball>(collidable);
+		sf::FloatRect realSize = sprite.getGlobalBounds();
 		sf::Vector2f ballPos = ball->GetPosition();
-		if (fabs(ballPos.x - platformPos.x) <= (SETTINGS.PLATFORM_WIDTH / 2.f) + (SETTINGS.BALL_SIZE / 2.f) &&
-			fabs(ballPos.y - platformPos.y) <= (SETTINGS.PLATFORM_HIGHT / 2.f) + (SETTINGS.BALL_SIZE / 2.f))
+		if (fabs(ballPos.x - platformPos.x) <= (realSize.width / 2.f) + (SETTINGS.BALL_SIZE / 2.f) &&
+			fabs(ballPos.y - platformPos.y) <= (realSize.height / 2.f) + (SETTINGS.BALL_SIZE / 2.f))
 		{
 			ball->SetCollisionParam(true, platformPos.x, false);
 			return true;
